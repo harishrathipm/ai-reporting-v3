@@ -1,0 +1,21 @@
+{
+  "databases": {
+    "ecommerce": {
+      "orders": ["order_id", "customer_id", "product_id", "quantity", "order_date"],
+      "products": ["product_id", "name", "description", "price", "stock"],
+      "customers": ["customer_id", "name", "email", "phone", "address"],
+      "categories": ["category_id", "name", "description"],
+      "reviews": ["review_id", "product_id", "customer_id", "rating", "comment"]
+    },
+    "inventory": {
+      "stock_levels": ["product_id", "warehouse_id", "stock_quantity"],
+      "warehouses": ["warehouse_id", "location", "capacity"],
+      "suppliers": ["supplier_id", "name", "contact_info", "rating"]
+    },
+    "marketing": {
+      "campaigns": ["campaign_id", "name", "start_date", "end_date", "budget"],
+      "ad_performance": ["ad_id", "campaign_id", "clicks", "impressions", "cost"],
+      "customer_engagement": ["engagement_id", "customer_id", "campaign_id", "engagement_type", "timestamp"]
+    }
+  }
+}
