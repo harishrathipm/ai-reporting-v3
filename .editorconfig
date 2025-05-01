@@ -13,3 +13,8 @@ trim_trailing_whitespace = false
 
 [*.{js,jsx,ts,tsx,css,scss,html,json}]
 trim_trailing_whitespace = true
+
+[*.py]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
