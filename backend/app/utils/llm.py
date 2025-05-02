@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
-from utils.config import Config
+from app.core.config import Config
 
 class LLM:
     def __init__(self):

@@ -1,13 +1,3 @@
-# Node.js dependencies
-frontend/build/
-frontend/coverage/
-frontend/node_modules/
-
-# Python bytecode and virtual environments
-__pycache__/
-*.py[cod]
-.venv/
-
 
 #specific
 *.log

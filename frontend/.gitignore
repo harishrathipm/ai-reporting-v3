@@ -1,0 +1,4 @@
+# Node.js dependencies
+build/
+coverage/
+node_modules/
