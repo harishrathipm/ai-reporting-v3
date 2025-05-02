@@ -1,5 +1,5 @@
 run:
-	.venv\Scripts\activate && uvicorn main:app --reload
+	.venv\Scripts\activate && uvicorn main:app --reload --port 8000
 
 install:
 	.venv\Scripts\activate && pip install -r requirements.txt

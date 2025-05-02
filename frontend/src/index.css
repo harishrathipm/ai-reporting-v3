@@ -1,0 +1,12 @@
+/* Reset global styles */
+body {
+  margin: 0;
+  font-family: Roboto, Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
