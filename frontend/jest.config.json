@@ -1,3 +1,5 @@
 {
-  "testEnvironment": "jsdom"
+  "testEnvironment": "jsdom",
+  "setupFiles": ["./jest.setup.js"],
+  "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"]
 }

@@ -8,7 +8,6 @@ log.setLevel('info');
 // Create an Axios instance
 const apiClient = axios.create({
   baseURL: config.SERVER_URL,
-  timeout: 10000,
 });
 
 // Add a request interceptor

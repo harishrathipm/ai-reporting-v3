@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import ChatAPI from '../api/ChatAPI';
 import MessageBubble from './MessageBubble';
+import ResponseRenderer from './ResponseRenderer';
 
 function Chat() {
   const [messages, setMessages] = useState([]);
@@ -16,13 +17,16 @@ function Chat() {
 
     try {
       const data = await ChatAPI.sendMessage(input);
-      const botMessage = { sender: 'bot', text: data.response };
+      const botMessage = { sender: 'bot', response: data };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error('Error:', error);
       const errorMessage = {
         sender: 'bot',
-        text: 'Failed to fetch response. Please try again.',
+        response: {
+          type: 'error',
+          message: 'Failed to fetch response. Please try again.',
+        },
       };
       setMessages((prev) => [...prev, errorMessage]);
     }
@@ -60,9 +64,14 @@ function Chat() {
             gap: 1,
           }}
         >
-          {messages.map((msg, index) => (
-            <MessageBubble key={index} text={msg.text} sender={msg.sender} />
-          ))}
+          {console.log('Messages:', messages)}
+          {messages.map((msg, index) =>
+            msg.sender === 'user' ? (
+              <MessageBubble key={index} text={msg.text} sender={msg.sender} />
+            ) : (
+              <ResponseRenderer key={index} response={msg.response} />
+            )
+          )}
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <TextField

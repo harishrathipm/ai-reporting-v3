@@ -1,11 +1,14 @@
 // App.test.js
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import App from './App.js';
+import App from './App';
 
-test('renders welcome message', () => {
-  const { getByText } = render(<App />);
-  const welcomeElement = getByText(/Welcome to the Frontend/i);
-  expect(welcomeElement).toBeInTheDocument();
+describe('App', () => {
+  it('renders the Chat component', () => {
+    render(<App />);
+    expect(
+      screen.getByPlaceholderText('Type your message...')
+    ).toBeInTheDocument();
+  });
 });
