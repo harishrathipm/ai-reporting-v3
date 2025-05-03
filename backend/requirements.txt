@@ -9,3 +9,7 @@ openai
 python-dotenv
 langchain
 langchain-openai
+pymongo
+SQLAlchemy
+langgraph
+langsmith

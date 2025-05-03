@@ -7,7 +7,7 @@ The AI Reporting Platform is a modular, LLM-powered system designed to act as a 
 ## The system supports:
 
 Natural language query input  
- Role-based access control (via Azure AD or internal DB)  
+ Role-based access control (Executive vs Analyst)  
  Real-time multi-DB connectivity (SQL, NoSQL, files)  
  Semantic enrichment of schema via LLM \+ web search  
  Stepwise query planning, decomposition, and execution  
@@ -37,7 +37,7 @@ Query planning and execution
 ## Security & Context Management
 
 - UserRoleResolverAgent
-  - Resolves roles from Azure AD or internal DB
+  - Predefind roles: Executive, Analyst
 - RoleToEntityAccessAgent
   - Uses LLM to determine what entities/tables user should have access to
 - GlobalExecutionContext
@@ -61,7 +61,7 @@ Parametrized queries (no raw SQL execution)
 
 ## Data Infrastructure & Schema Understanding
 
-- Databa seConnectorTool
+- Database ConnectorTool
   - Connects to various DBs (MySQL, Mongo, CSV, etc.),
   - It will use packages like SqlAlchemy or PyMongo tools internally
 - DBIntrospectorTool
@@ -162,7 +162,71 @@ Primary: React UI with chat & visualization
 - Metadata attached to every step detailing execution steps with all required context for re-execution
 - Stored in: query_metadata collection in MongoDB
 
+## Externalized Prompts
+
+All agent and tool prompts have been externalized to the `prompts/` folder for better maintainability. Each prompt is stored in a separate file, categorized by agent or tool. For example:
+
+- `prompts/query_planner_agent.txt`: Contains the prompt for the `QueryPlannerAgent`.
+- `prompts/insight_generator_agent.txt`: Contains the prompt for the `InsightGeneratorAgent`.
+
+This allows for easier updates and version control of prompts.
+
 # Architecture & Tech Stack
+
+## Updates for Production Readiness
+
+### Backend Enhancements
+
+- **ExecutionGuardrails**: Enhanced with logging for validation failures and support for custom validation rules.
+- **FallbackExecutorTool**: Improved with detailed logging and dynamic tool selection.
+- **LangGraphFlowEngine**: Extended with nodes for clarification handling and output formatting.
+- **TempStorage** and **StepLocalState**: Optimized with indexing and TTL for faster queries and automatic cleanup.
+- **ResultMetadataTracker**: Enhanced with detailed execution metrics, error details, and batch retrieval capabilities.
+- **VisualizationBuilderModel**: Added support for scatter and heatmap charts.
+- **InsightGeneratorAgent**: Extended to include statistical analyses and actionable recommendations.
+- **QueryPlannerAgent**: Supports user feedback loops for refining logical plans.
+- **QueryExecutionToolSelector**: Considers execution constraints for tool selection.
+
+### Security Enhancements
+
+- **Role-Based Access Control**: Enforced stricter validation of user roles against predefined permissions.
+- **Session TTLs**: Added automatic expiration of inactive sessions.
+
+### Frontend Enhancements
+
+- **React Query**: Integrated for state management and API caching.
+- **Error Boundaries**: Implemented to handle unexpected errors gracefully.
+- **Health Checks**: Added to the frontend Dockerfile and Docker Compose configuration.
+
+### Infrastructure Improvements
+
+- **Docker**: Multi-stage builds added to backend and frontend Dockerfiles to optimize image size.
+- **Docker Compose**: Health checks configured for backend, frontend, and MongoDB services.
+- **CI/CD Pipeline**: Enforced test coverage thresholds for both backend and frontend.
+
+### Testing
+
+- Comprehensive unit tests added for all new components:
+  - `StepLocalState`
+  - `TempStorage`
+  - `KnowledgeGraphBuilderTool`
+  - `IntentClassifierAgent`
+  - `ClarificationDetectorAgent`
+  - `UserNoteIntegratorTool`
+- Test coverage thresholds set to 90% for both backend and frontend.
+
+### Documentation
+
+- Updated to reflect the final implementation and production-ready state of the project.
+
+## Updated Workflow Example
+
+1. User query → Role resolved → Context created
+2. Query planned → Decomposed → Tools selected
+3. DBs introspection → Knowledge graph built → Queries run
+4. Intermediate results stored → Analyzed → Visualized
+5. Results formatted for React → Dispatched to UI or external system
+6. Metadata saved at every step
 
 ## Deployment Notes
 
@@ -232,7 +296,36 @@ Primary: React UI with chat & visualization
 
 ## Folder Structure
 
+- `prompts/`: Contains externalized prompts for agents and tools.
 - `backend/`: Backend services and logic.
 - `frontend/`: React-based frontend.
 - `infra/`: Deployment configurations.
 - `docs/`: Documentation.
+
+## Database Integration
+
+The system supports both SQL and NoSQL databases. For SQL databases, SQLAlchemy is used for schema introspection and query execution. For NoSQL databases, PyMongo is used for MongoDB interactions.
+
+### Installation Instructions
+
+1. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Ensure the following environment variables are set:
+   - `SQLALCHEMY_DATABASE_URL`: Connection string for the SQL database.
+   - `MONGO_URI`: Connection string for MongoDB.
+
+### Testing
+
+1. Run the test suite to verify database integration:
+
+   ```bash
+   pytest backend/tests/
+   ```
+
+2. Specific test cases for database interactions:
+   - `test_query_executor_tool.py`: Tests query execution for both SQL and MongoDB.
+   - `test_global_execution_context.py`: Tests session management and temporary storage in MongoDB.

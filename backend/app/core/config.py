@@ -18,3 +18,7 @@ class Config:
     load_dotenv(env_file)
 
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+    TEMP_DB_NAME = os.getenv("TEMP_DB_NAME", "temp_db")
+    META_DB_NAME = os.getenv("META_DB_NAME", "meta_db")
+    SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "sqlite:///./test.db")

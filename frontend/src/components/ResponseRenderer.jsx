@@ -31,6 +31,19 @@ const ResponseRenderer = ({ response }) => {
       );
     case 'card':
       return <CardRenderer title={response.title} content={response.content} />;
+    case 'complex':
+      return (
+        <div>
+          <h3>Insights</h3>
+          <PlainTextRenderer text={response.data.insights} />
+          <h3>Visualization</h3>
+          <ChartRenderer
+            type='bar'
+            data={response.data.visualization.data}
+            options={response.data.visualization.options}
+          />
+        </div>
+      );
     case 'error':
       return <ErrorMessage message={response.message} />;
     default:

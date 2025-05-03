@@ -9,6 +9,11 @@ services:
       - ./backend/.env.dev
     environment:
       - ENV=development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   frontend:
     build: ./frontend
@@ -16,13 +21,33 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   mongo:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - d:/github/tempdata/mongo:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
-volumes:
-  mongo_data:
+  neo4j:
+    image: neo4j:latest
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/test
+    volumes:
+      - d:/github/tempdata/neo4j_data:/data
+      - d:/github/tempdata/neo4j_logs:/logs
+      - d:/github/tempdata/neo4j_import:/var/lib/neo4j/import
+      - d:/github/tempdata/neo4j_plugins:/plugins

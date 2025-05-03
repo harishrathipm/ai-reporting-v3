@@ -17,7 +17,17 @@ function Chat() {
 
     try {
       const data = await ChatAPI.sendMessage(input);
-      const botMessage = { sender: 'bot', response: data };
+      const botMessage = {
+        sender: 'bot',
+        response: {
+          type: 'complex',
+          data: {
+            insights: data.insights,
+            visualization: data.visualization,
+            rawData: data.data,
+          },
+        },
+      };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error('Error:', error);
@@ -64,7 +74,6 @@ function Chat() {
             gap: 1,
           }}
         >
-          {console.log('Messages:', messages)}
           {messages.map((msg, index) =>
             msg.sender === 'user' ? (
               <MessageBubble key={index} text={msg.text} sender={msg.sender} />
